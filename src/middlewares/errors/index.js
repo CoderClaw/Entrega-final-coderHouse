@@ -9,6 +9,6 @@ export const handleErrors = () => ( error, req, res, next ) => {
             return res.send({status: 'error', error: error.name})
             break
         default:
-            return res.send({status: 'error', error: 'error no identificado'})
+            return res.send({status: 'error', error: 'Unknown error'})
     }
 }
