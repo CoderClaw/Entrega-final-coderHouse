@@ -1,0 +1,169 @@
+paths:
+    /api/carts/{cid}:
+        get:
+            summary: Get all products in the cart
+            tags:
+                - Carts
+            parameters:
+                - name: cid
+                  in: path
+                  required: true
+                  description: Cart CID
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: 'Products in the cart were retrieved successfully'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Carts'
+                '500':
+                    description: 'Internal server error'
+        delete:
+            summary: Empty the selected cart
+            tags:
+                - Carts
+            parameters:
+                - name: cid
+                  in: path
+                  required: true
+                  description: Cart CID
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: 'The cart was emptied successfully'
+                '404':
+                    description: 'Cart not found'
+                '500':
+                    description: 'Internal server error'
+        put:
+            summary: Add multiple products to a cart
+            tags:
+                - Carts
+            parameters:
+                - name: cid
+                  in: path
+                  required: true
+                  description: Cart CID
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#components/requestBodies/manyProducts'
+            responses:
+                '200':
+                    description: 'Products were added successfully'
+                '404':
+                    description: 'Cart or product not found'
+                '500':
+                    description: 'Internal server error'
+    /api/carts/{cid}/product/{pid}:
+        post:
+            summary: Add a product to the cart
+            tags:
+                - Carts
+            parameters:
+                - name: cid
+                  in: path
+                  required: true
+                  description: Cart CID
+                  schema:
+                      type: string
+                - name: pid
+                  in: path
+                  required: true
+                  description: Product ID to add
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#components/requestBodies/addProduct'
+            responses:
+                '200':
+                    description: 'The product was added successfully'
+                '404':
+                    description: 'Cart or product not found'
+                '500':
+                    description: 'Internal server error'
+        delete:
+            summary: Remove a product from the cart
+            tags:
+                - Carts
+            parameters:
+                - name: cid
+                  in: path
+                  required: true
+                  description: Cart CID
+                  schema:
+                      type: string
+                - name: pid
+                  in: path
+                  required: true
+                  description: Product ID to remove
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: 'The product was removed successfully'
+                '404':
+                    description: 'Cart not found'
+                '500':
+                    description: 'Internal server error'
+components:
+    schemas:
+        Carts:
+            type: object
+            properties:
+                _id:
+                    type: ObjectId
+                    description: Auto-generated cart ID
+                products:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            productId:
+                                type: ObjectId
+                                description: Product ID
+                            quantity:
+                                type: integer
+                                description: Quantity of the product
+            example:
+                _id: '-'
+                products:
+                    - product: '-'
+                      quantity: 2
+                    - product: '-'
+                      quantity: 1
+    requestBodies:
+        addProduct:
+            type: object
+            properties:
+                quantity:
+                    type: String
+                    description: Quantity to add to the cart
+            example:
+                quantity: 20
+        manyProducts:
+            type: array
+            properties:
+                products:
+                    type: object
+                    description: Product to add
+                quantity:
+                    type: String
+                    description: Quantity to add to the cart
+            example:
+                products:
+                    - productId: '-'
+                      quantity: 21
+                    - productId: '-'
+                      quantity: 12

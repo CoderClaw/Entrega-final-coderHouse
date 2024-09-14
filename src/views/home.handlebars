@@ -1,0 +1,37 @@
+<main class="bg-dark text-light">
+    <div class="container bg-dark text-light"  >
+        <div style="position: relative; height: 50px;">
+            <a href="/login" style="display: inline-block; margin-top: 10px; " class="btn btn-outline-light">
+                Ingresar a Mi Cuenta
+            </a>
+       </div>
+       <h2 class="bg-dark text-light">Lista de Productos</h2> 
+       <div class="container bg-dark text-light">
+            <div class="row">
+                {{#each productos}}
+                <div class="col-md-4 mb-4">
+                    <div class="card bg-dark text-light border-light h-100">
+                        <h5 class="card-header">{{this.title}}</h5>
+                        <div class="card-body">
+                            <p class="card-text">Descripción: {{this.description}}</p>
+                            <p class="card-text">Precio: {{this.price}}</p>
+                            <p class="card-text">Stock: {{this.stock}}</p>
+                            <p class="card-text">Categoría: {{this.category}}</p>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <center class="bg-dark text-light">
+            {{#if hasPrevPage}}
+                <a href="/products?nropage={{prevPage}}">Anterior</a>
+            {{/if}}
+            <label>{{page}}</label>
+            {{#if hasNextPage}}
+                <a href="/products?nropage={{nextPage}}">Siguente</a>
+            {{/if}}
+        </center>
+    </div>
+</main>

@@ -1,0 +1,71 @@
+<main class="bg-dark text-light border-light">
+    <div style="position: relative; height: 50px;">
+        <a href= "/products" style="display: inline-block;margin-top: 10px;" class="btn btn-outline-light">
+            Volver 
+        </a>
+        <a href="/api/sessions/logout"  style="position: absolute;  right: 0;margin-top: 10px; " class="btn  btn-outline-light">
+            Logout
+        </a> 
+    </div>
+    
+     <div class="container bg-dark text-light"  >
+         <h2>Listado de Usuarios</h2>
+          {{#each users}}
+            <div class="container h-100">
+                <div class="row h-100">
+                    <div class="col-md-4 my-auto ">
+                        <div class="card bg-dark text-light border-light mb-3">
+                             <div class="card-body">
+                                <p class="card-text">Nombre y Apellido: {{this.full_name}}</p>
+                                <p class="card-text">Email: {{this.email}}</p>
+                                <p class="card-text">Role: {{this.role}}</p>
+                             </div>
+                        
+                            <form action="/api/users/premium/{{this._id}}" method="post">
+                                    <input type="text" name="uid" value="{{this._id}}"  style="display: none;">
+                                    <button class="btn btn-outline-light">Cambiar ROLE</button>
+                            </form>  
+                             <button class="btn btn-outline-light" onclick="eliminarUser('{{this._id}}')"><strong> Eliminar Usuario </strong></button>
+                        
+                         </div>
+                    </div>
+                </div>
+            </div> 
+        {{/each}}
+
+        <center >
+            {{#if hasPrevPage}}
+                <a href="/users?nropage={{prevPage}}">Anterior</a>
+            {{/if}}
+            <label>{{page}}</label>
+            {{#if hasNextPage}}
+                <a href="/users?nropage={{nextPage}}">Siguente</a>
+            {{/if}}
+        </center>
+             
+</div>
+</main>
+
+<script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js "></script>
+<script>
+    function eliminarUser(uid) {
+            console.log ('Current User ID',uid)
+
+            fetch(`/api/users/${uid}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: data.payload,
+                }); 
+              //  window.location.reload()       
+            })
+    }
+</script>

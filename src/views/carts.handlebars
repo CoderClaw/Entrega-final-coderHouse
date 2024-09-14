@@ -1,0 +1,93 @@
+<main class="bg-dark text-light">
+    <div style="position: relative;" class="bg-dark text-light">
+        <a href= "/products" style="display: inline-block;margin-top: 10px;" class="btn btn-outline-light">
+            Volver 
+        </a>
+        <a href="/api/sessions/logout"  style="position: absolute;  right: 0;margin-top: 10px; " class="btn  btn-outline-light">
+            Logout
+        </a> 
+    </div>
+    <div >
+       <h2>Mi carrito</h2>
+        <div class="container h-100 bg-dark text-light">
+             <div class="row h-100 bg-dark text-light">
+                  <div class="col-md-4 my-auto border-light ">
+                     <div class="card bg-dark text-light mb-3 border-light">
+                        {{#each productos}}
+                            <h4>Producto: {{this.product.title}}</h4>
+                            <p>Descripción: {{this.product.description}}</p>
+                            <p>Precio: ${{this.product.price}}</p>
+                            <p>Código del producto: {{this.product.code}}</p>
+                            <p>CANTIDAD: {{this.quantity}}</p>     
+                            <button class="btn btn-outline-danger" onclick="eliminarProduct('{{this.product._id}}')"><strong> Eliminar Producto </strong></button>
+                        {{/each}}
+                </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul id="messageLog"></ul>
+        </div>
+        <button id="terminar-compra" onclick="terminarCompra()" class="btn btn-dark">Finalizar compra</button>
+    </div>
+     
+</main>
+<script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js "></script>
+<script>
+
+    function eliminarProduct(id) {
+        const currentUrl = window.location.href;
+        const parts = currentUrl.split('/');
+        const cartId = parts[parts.length - 1];
+        console.log ('Current',cartId)
+       
+        if (!cartId) {
+            console.error('CID no encontrado en la URL');
+            return;
+        }
+        fetch(`/api/carts/${cartId}/product/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            window.location.reload()            
+        })
+    }
+
+    function terminarCompra() {
+        const currentUrl = window.location.href;
+        const parts = currentUrl.split('/');
+        const cartId = parts[parts.length - 1];
+        console.log ('terminarCompra',cartId)
+       
+        if (!cartId) {
+            console.error('CID no encontrado en la URL');
+            return;
+        }
+     
+        fetch(`/api/carts/${cartId}/purchase`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+             Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: data.message,
+        }).then(() => {
+                if (data.status === 'success' && data.ticketId) { 
+                    window.location.href = `/ticket/${data.ticketId}`; 
+                } else {
+                    console.error('Error en la compra:', data.message);
+                }
+                });
+        });
+    }
+</script>

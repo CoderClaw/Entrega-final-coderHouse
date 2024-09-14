@@ -1,0 +1,11 @@
+# Archivos y carpetas innecesarios
+node_modules/
+/src/upload/
+dist/
+build/
+.cache/
+.env
+
+# Archivos de dependencias
+package-lock.json
+errors.log

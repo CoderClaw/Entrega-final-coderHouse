@@ -1,0 +1,60 @@
+<main>
+    <div class="container bg-dark text-light"  >
+        <div style="position: relative; height: 50px;" class="bg-dark text-light">
+            {{#if role}}
+                <a href="/realtimeproducts" style="display: inline-block; margin-top: 10px; " class="btn btn-outline-light">
+                    Admin. Productos
+                </a>
+            {{/if}}
+            {{#if roleAdmin}}
+                <a href="/users" style="display: inline-block;margin-top: 10px; " class="btn btn-outline-light">
+                    Admin. Usuarios
+                </a>
+            {{/if}}
+            <a href= "/carts/{{cart}}" style="display: inline-block;margin-top: 10px;" class="btn btn-outline-light">
+                Ver Carrito 
+            </a>
+            <a href= "/uploadfile" style="display: inline-block;margin-top: 10px;" class="btn btn-outline-light">
+                Subir Archivos
+            </a>
+            <a href="/api/sessions/logout"  style="position: absolute;  right: 0;margin-top: 10px; " class="btn btn-outline-light">
+                Logout
+            </a> 
+       </div>
+       <h2>Lista de Productos</h2> 
+        <div class="container bg-dark text-light">
+            <div class="row border-light text-light">
+                {{#each productos}}
+                <div class="col-md-4 mb-4 bg-dark text-light">
+                    <div class="card border-light bg-dark text-light h-100 d-flex flex-column align-items-center justify-content-center">
+                        <h5 class="card-header text-light">{{this.title}}</h5>
+                        <div class="card-body border-light text-light">
+                            <p class="card-text text-light">Descripción: {{this.description}}</p>
+                            <p class="card-text text-light">Precio: {{this.price}}</p>
+                            <p class="card-text text-light">Stock: {{this.stock}}</p>
+                            <p class="card-text text-light">Categoría: {{this.category}}</p>
+                        </div>
+                        <form action="/products" method="post" class="w-75 d-flex flex-column align-items-center justify-content-center">
+                            <input id="txtCantidad" type="number" name="txtCantidad" placeholder="Ingrese Cantidad" class="form-control rounded-0 mb-3" />
+                            <input type="text" name="prodId" value="{{this._id}}" style="display: none;" class="w-75">
+                            <input type="text" name="CartId" value="{{../cart}}" style="display: none;" class="w-75">
+                            <button class="btn btn-outline-light">Agregar al carrito</button>
+                        </form>  
+                    </div>
+                 
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <center >
+            {{#if hasPrevPage}}
+                <a href="/products?nropage={{prevPage}}">Anterior</a>
+            {{/if}}
+            <label>{{page}}</label>
+            {{#if hasNextPage}}
+                <a href="/products?nropage={{nextPage}}">Siguente</a>
+            {{/if}}
+        </center>
+    </div>
+</main>
